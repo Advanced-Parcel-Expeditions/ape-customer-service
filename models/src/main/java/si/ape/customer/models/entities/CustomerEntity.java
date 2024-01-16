@@ -8,7 +8,15 @@ import javax.persistence.*;
 @NamedQueries(value =
         {
                 @NamedQuery(name = "CustomerEntity.getAll",
-                        query = "SELECT c FROM CustomerEntity c")
+                        query = "SELECT c FROM CustomerEntity c"),
+                @NamedQuery(name = "CustomerEntity.getBySearchString",
+                        query = "SELECT c FROM CustomerEntity c WHERE LOWER(c.name) LIKE LOWER(:searchString) " +
+                                "OR LOWER(c.surname) LIKE LOWER(:searchString) " +
+                                "OR LOWER(c.user.username) LIKE LOWER(:searchString) " +
+                                "OR LOWER(CONCAT(c.name, ' ', c.surname)) LIKE LOWER(:searchString) " +
+                                "OR LOWER(CONCAT(c.surname, ' ', c.name)) LIKE LOWER(:searchString) " +
+                                "OR LOWER(CONCAT(c.name, ' ', c.surname, ' ', c.user.username)) LIKE LOWER(:searchString) " +
+                                "OR LOWER(CONCAT(c.surname, ' ', c.name, ' ', c.user.username)) LIKE LOWER(:searchString)")
         })
 
 public class CustomerEntity {
