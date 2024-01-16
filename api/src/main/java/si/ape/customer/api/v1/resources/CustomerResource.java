@@ -9,6 +9,8 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import si.ape.customer.services.beans.CustomerBean;
 
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -25,6 +27,8 @@ import si.ape.customer.lib.*;
 @Path("/customer")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@DeclareRoles({"Administrator", "Warehouse manager", "Warehouse agent", "Delivery driver", "International driver",
+        "Logistics agent", "Order confirmation specialist", "Customer"})
 public class CustomerResource {
 
     private final Logger log = Logger.getLogger(CustomerResource.class.getName());
@@ -47,6 +51,7 @@ public class CustomerResource {
     @Path("/{searchString}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"Administrator", "Warehouse manager", "Logistics agent", "Order confirmation specialist"})
     public Response findCustomers(@Parameter(description = "Search string for customer search.", required = true)
                                   @PathParam("searchString") String searchString) {
 
